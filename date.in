@@ -1,9 +1,12 @@
-3
-0
-0 1
-0 1 a
-0 0 b
-1 0 b
-1 2 a
-2 2 a
-2 2 b
+4
+s
+r
+s s b
+s p a
+s p b
+p p a
+p q b
+q s b
+q r a
+r r a
+r r b
