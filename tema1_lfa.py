@@ -6,6 +6,9 @@ traducere=[]
 adiacenta=[]
 n=0
 parcurse=[]#nodurile parcurse
+
+#functia de citire
+
 def citire():
     global adiacenta,traducere,st_final,st_initial,n
     f=open('date.in')# fisier de forma: nr noduri \n starea initiala\n starea finala\ {nod1,nod2,arc}...
@@ -23,8 +26,9 @@ def citire():
                 traducere.append(l[i])
         adiacenta[traducere.index(l[0])][traducere.index(l[1])].append(l[2])
         sir=f.readline()
-    print(st_initial)
 
+
+#verificarea cuvantului
 
 def check_input(sir):
     if (sir!="λ"):
@@ -49,6 +53,10 @@ def check_input(sir):
             print("Da")
         else:
             print("Drumul e gresit.")
+
+
+#parcurgerea cuvantului
+
 def parcurgerea_cuvantului(drum):
     global adiacenta, traducere, st_final, st_initial,n,parcurse
 
@@ -77,11 +85,15 @@ def parcurgerea_cuvantului(drum):
     else:
         print("Drumul este gresit")
 
+
 ##programul
+
+
 citire()
 sir=input("Introduceti cuvantul")
 check_input(sir)
 print(parcurse)
+
 
 #pygame
 pygame.init()
@@ -94,16 +106,20 @@ pygame.display.set_caption("Automatul")
 font = pygame.font.Font(None, 20)
 
 # nod
+
 def creare_nod_normal(i,k):
     pygame.draw.circle(screen,(0,0,0),((i+1)*50,300),20,1)
     screen.blit(font.render(str(k), True, (0,0,0)), ((i+1)*50-5,290))
     if (k in st_initial):
         pygame.draw.line(screen,(255,0,0),((i+1)*50,300),((i+1)*50,400),1)
 
+
 def creare_nod_final(i,k):
     pygame.draw.circle(screen,(0,0,0),((i+1)*50,300),20,1)
     pygame.draw.circle(screen,(0,0,0),((i+1)*50,300),15,1)
     screen.blit(font.render(str(k), True, (0, 0, 0)), ((i+1)* 50-5 , 290))
+
+
 def creare_arc_neparcurs(i,j):
     if (i!=j):
         if(i<j):
@@ -153,10 +169,8 @@ def creare_arc_parcurs(i,j):
             screen.blit(font.render(str(val), True, (0, 0, 0)), ((i + 1) * 50 + p + 20, 300))
             p += 5
 
-
-
-
 running=True
+
 while (running):
     screen.fill((255,255,255))
     for x in traducere:
@@ -173,13 +187,8 @@ while (running):
                 else:
                     creare_arc_parcurs(i,j)
 
-
-
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-
 
     pygame.display.update()
