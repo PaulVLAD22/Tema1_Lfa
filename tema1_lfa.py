@@ -11,7 +11,9 @@ parcurse=[]#nodurile parcurse
 
 def citire():
     global adiacenta,traducere,st_final,st_initial,n
-    f=open('date.in')# fisier de forma: nr noduri \n starea initiala\n starea finala\ {nod1,nod2,arc}...
+    f=open('date.in')# fisier de forma: nr noduri \n starea initiala\n starea finala\{nod1,nod2,arc}
+    # PENTRU GRAFICA CONTEAZA ORDINEA IN CARE SCRII IN FISIER nod1,nod2,arc.(SCrii mai intai in ordine toate arcele pt nod1
+    # ex: {nod1,nod1,a} {nod1,nod2,b} {nod1,nod4,c}, {nod2,nod1,a} {nod2,nod2,b}, ....
     n=int(f.readline())
     st_initial=f.readline()[0]
     sir=f.readline()
