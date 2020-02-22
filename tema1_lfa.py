@@ -16,7 +16,6 @@ def citire():
     adiacenta=[[[] for i in range (n)]for j in range (n)]
     sir=f.readline()
     traducere=[]
-    print(adiacenta)
     while (sir):
         l=sir.split()
         for i in range(2):
@@ -48,8 +47,6 @@ def check_input(sir):
         print("Da")
 def parcurgerea_cuvantului(drum):
     global adiacenta, traducere, st_final, st_initial,n,parcurse
-    print(adiacenta)
-    print(st_initial)
     poz = traducere.index(st_initial)
 
     st_final_numere = []
@@ -63,7 +60,7 @@ def parcurgerea_cuvantului(drum):
                 parcurse.append((poz,k))
                 poz = k
 
-                print(poz)
+                
                 break
         else:
             log = 1
