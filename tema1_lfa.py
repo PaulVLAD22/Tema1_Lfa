@@ -23,6 +23,7 @@ def citire():
                 traducere.append(l[i])
         adiacenta[traducere.index(l[0])][traducere.index(l[1])].append(l[2])
         sir=f.readline()
+    print(st_initial)
 
 
 def check_input(sir):
@@ -44,15 +45,20 @@ def check_input(sir):
         else:
             print("Drumul este gresit")
     else:
-        print("Da")
+        if (st_initial in st_final):
+            print("Da")
+        else:
+            print("Drumul e gresit.")
 def parcurgerea_cuvantului(drum):
     global adiacenta, traducere, st_final, st_initial,n,parcurse
+
+    print(st_initial)
     poz = traducere.index(st_initial)
 
     st_final_numere = []
     for x in st_final:
         st_final_numere.append(traducere.index(x))
-    print(st_final_numere)
+
     log = 0
     for x in drum:
         for k in range(n):
@@ -60,7 +66,7 @@ def parcurgerea_cuvantului(drum):
                 parcurse.append((poz,k))
                 poz = k
 
-                
+
                 break
         else:
             log = 1
@@ -91,6 +97,9 @@ font = pygame.font.Font(None, 20)
 def creare_nod_normal(i,k):
     pygame.draw.circle(screen,(0,0,0),((i+1)*50,300),20,1)
     screen.blit(font.render(str(k), True, (0,0,0)), ((i+1)*50-5,290))
+    if (k in st_initial):
+        pygame.draw.line(screen,(255,0,0),((i+1)*50,300),((i+1)*50,400),1)
+
 def creare_nod_final(i,k):
     pygame.draw.circle(screen,(0,0,0),((i+1)*50,300),20,1)
     pygame.draw.circle(screen,(0,0,0),((i+1)*50,300),15,1)
@@ -174,4 +183,3 @@ while (running):
 
 
     pygame.display.update()
-
