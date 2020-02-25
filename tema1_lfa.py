@@ -1,6 +1,6 @@
 from graphviz import Digraph
 #programul normal
-
+# FA CU COMMAND PROMPT , LA MINE NU MERGE IN PYCHARM
 #variabilele
 st_initial=0
 st_final=[]
