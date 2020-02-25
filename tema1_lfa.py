@@ -78,13 +78,14 @@ def parcurgerea_cuvantului(drum):
         print("Drumul este gresit")
 
 citire()
-cuvant=input("Introduceti cuvantul")
+cuvant=input("Introduceti cuvantul:")
 check_input(cuvant)
 print(adiacenta)
 print(parcurse)
 print(traducere)
+
+
 #grafica
-nod_desenat=[0]*n
 g=Digraph(name="Automat",filename="fisier.pdf")
 g.attr('node',shape='doublecircle')
 for x in st_final:
