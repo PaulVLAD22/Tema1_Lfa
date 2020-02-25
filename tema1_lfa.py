@@ -1,6 +1,7 @@
 from graphviz import Digraph
 #programul normal
 # FA CU COMMAND PROMPT , LA MINE NU MERGE IN PYCHARM
+# pune pe desktop, si un fisier date.txt
 #variabilele
 st_initial=0
 st_final=[]
@@ -10,7 +11,7 @@ parcurse=[]
 traducere=[]
 def citire():
     global adiacenta,st_final,st_initial,traducere
-    f=open("date.in")
+    f=open("date.txt")
     n=int(f.readline())
     st_initial=f.readline()[0]
     sir=f.readline()
