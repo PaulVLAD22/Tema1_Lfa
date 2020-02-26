@@ -104,7 +104,7 @@ print(a.parcurse)
 
 
 #grafica
-g=Digraph(name="Automat",filename="fisier.pdf")
+g=Digraph(name="Automat",filename="pop.pdf")
 for x in a.traducere:
     nod=Nod(a,x)
     nod.desenare(g)
@@ -112,9 +112,16 @@ for x in a.adiacenta.keys():
     for k in a.adiacenta[x].keys():
         if (a.adiacenta[x][k]!=[]):
             if ((x,k) in a.parcurse):
-                g.attr('edge',color='green')
-                g.edge(x,k)
+                for p in a.adiacenta[x][k]:
+                    g.attr('edge',color='green')
+                    g.edge(x,k,p)
             else:
-                g.attr('edge',color='black')
-                g.edge(x,k)
+                for p in a.adiacenta[x][k]:
+                    g.attr('edge',color='black')
+                    g.edge(x,k,p)
+
 g.view()
+
+
+
+
