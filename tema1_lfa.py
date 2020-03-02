@@ -1,6 +1,7 @@
 from graphviz import Digraph
 class Automat:
     def __init__(self,f):
+        self.bun=1
         self.nr=int(f.readline())
         self.st_initial=f.readline()[0]
         self.st_final=f.readline().split()
@@ -31,6 +32,7 @@ class Automat:
             if(self.st_initial in self.st_final):
                 print("CORECT")
             else:
+                self.bun=0
                 print("GRESIT")
         else:
             ex_litere=0
@@ -47,25 +49,28 @@ class Automat:
             if (ex_litere+ex_cifre==1):
                 return drum
             else:
+                self.bun=0
                 print("GRESIT")
         return 0
     def parcurgerea_cuvantului(self,drum):
         poz=self.st_initial
         log=0
         for x in drum:
-            for k in self.adiacenta[poz].keys():
-                if(x in self.adiacenta[poz][k]):
-                    self.parcurse.append((poz,k))
-                    poz=k
-                    break
-                    print(poz)
-            else:
-                log=1
+            if (self.adiacenta.get(poz)!=None):
+                for k in self.adiacenta[poz].keys():
+                    if(x in self.adiacenta[poz][k]):
+                        self.parcurse.append((poz,k))
+                        poz=k
+                        break
+                        print(poz)
+                else:
+                    log=1
         if (poz not in self.st_final):
             log=1
         if (log==0):
             print("Da")
         else:
+            self.bun=0
             print("Drumul este gresit")
 
 class Nod:
@@ -104,7 +109,7 @@ print(a.parcurse)
 
 
 #grafica
-g=Digraph(name="Automat",filename="pop.pdf")
+g=Digraph(name="Automat",filename="poppdf")
 for x in a.traducere:
     nod=Nod(a,x)
     nod.desenare(g)
@@ -113,15 +118,16 @@ for x in a.adiacenta.keys():
         if (a.adiacenta[x][k]!=[]):
             if ((x,k) in a.parcurse):
                 for p in a.adiacenta[x][k]:
-                    g.attr('edge',color='green')
-                    g.edge(x,k,p)
+                    if (a.bun==1):
+                        g.attr('edge',color='green')
+                        g.edge(x,k,p)
+                    else:
+                        for p in a.adiacenta[x][k]:
+                            g.attr('edge',color="black")
+                            g.edge(x,k,p)
             else:
                 for p in a.adiacenta[x][k]:
                     g.attr('edge',color='black')
                     g.edge(x,k,p)
 
 g.view()
-
-
-
-
