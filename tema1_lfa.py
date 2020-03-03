@@ -1,14 +1,18 @@
 from graphviz import Digraph
+
+
 class Automat:
-    def __init__(self,f):
-        self.bun=1
-        self.nr=int(f.readline())
-        self.st_initial=f.readline()[0]
-        self.st_final=f.readline().split()
-        self.parcurse=[]
-        traducere=[]#nodurile
-        adiacenta={}# legaturile dintre noduri
-        sir=f.readline()
+    def __init__(self, f):
+        self.bun = 1
+        self.nr = int(f.readline())
+        self.st_initial = f.readline()[0]
+        self.st_final = f.readline().split()
+        self.parcurse = []
+
+        traducere = []  # nodurile
+        adiacenta = {}  # legaturile dintre noduri
+        sir = f.readline()
+
         while (sir):
             l = sir.split()
             for i in range(2):
@@ -23,111 +27,124 @@ class Automat:
                 else:
                     adiacenta[l[0]][l[1]].append(l[2])
             sir = f.readline()
-        self.adiacenta=adiacenta
-        self.traducere=traducere
+
+        self.adiacenta = adiacenta
+        self.traducere = traducere
         print(adiacenta)
+
     def check_input(self):
-        cuvant=input("Introduceti cuvantul in automat")
-        if (cuvant==""):
-            if(self.st_initial in self.st_final):
+        cuvant = input("Introduceti cuvantul in automat:")
+
+        if (cuvant == ""):
+            if (self.st_initial in self.st_final):
                 print("CORECT")
             else:
-                self.bun=0
+                self.bun = 0
                 print("GRESIT")
         else:
-            ex_litere=0
-            ex_cifre=0
-            drum=[]
+            ex_litere = 0
+            ex_cifre = 0
+            drum = []
+
             for x in cuvant:
                 drum.append(x)
                 if (x.isdecimal()):
-                    ex_cifre=1
-                elif(x in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ"):
-                    ex_litere=1
+                    ex_cifre = 1
+                elif (x in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ"):
+                    ex_litere = 1
                 else:
-                    ex_cifre=2 #date gresite
-            if (ex_litere+ex_cifre==1):
+                    ex_cifre = 2  # date gresite
+
+            if (ex_litere + ex_cifre == 1):
                 return drum
             else:
-                self.bun=0
+                self.bun = 0
                 print("GRESIT")
+
         return 0
-    def parcurgerea_cuvantului(self,drum):
-        poz=self.st_initial
-        log=0
+
+    def parcurgerea_cuvantului(self, drum):
+        poz = self.st_initial
+        log = 0
+
         for x in drum:
-            if (self.adiacenta.get(poz)!=None):
+            if (self.adiacenta.get(poz) != None):
                 for k in self.adiacenta[poz].keys():
-                    if(x in self.adiacenta[poz][k]):
-                        self.parcurse.append((poz,k))
-                        poz=k
+                    if (x in self.adiacenta[poz][k]):
+                        self.parcurse.append((poz, k))
+                        poz = k
                         break
                         print(poz)
                 else:
-                    log=1
+                    log = 1
+
         if (poz not in self.st_final):
-            log=1
-        if (log==0):
+            log = 1
+
+        if (log == 0):
             print("Da")
         else:
-            self.bun=0
+            self.bun = 0
             print("Drumul este gresit")
 
+
 class Nod:
-    def __init__(self,automat,val):
-        self.val=val
+    def __init__(self, automat, val):
+        self.val = val
         if (val in automat.st_final):
-            self.final=1 #boolean
+            self.final = 1  # boolean
         else:
-            self.final=0
-        if (val==automat.st_initial):
-            self.initial=1
+            self.final = 0
+        if (val == automat.st_initial):
+            self.initial = 1
         else:
-            self.initial=0
-    def desenare(self,g):
-        if (self.final==1):
-            g.attr('node',shape="doublecircle")
+            self.initial = 0
+
+    def desenare(self, g):
+        if (self.final == 1):
+            g.attr('node', shape="doublecircle")
         else:
-            g.attr('node',shape="circle")
-        if (self.initial==1):
+            g.attr('node', shape="circle")
+
+        if (self.initial == 1):
             g.node('', shape='none')
             g.node(self.val)
             g.edge('', self.val, label='START')
         else:
             g.node(self.val)
 
+def main():
 
+    f = open("date.txt")  # fisier de forma: nr noduri/ st_init/ st_finala/ legatura1 / legatura2/...
+    a = Automat(f)
+    drum = a.check_input()
+    if (drum != 0):
+        a.parcurgerea_cuvantului(drum)
+    print(a.parcurse)
 
+    # grafica
+    g = Digraph(name="Automat", filename="pfjgipsfjgipjsfipgfsip")
+    for x in a.traducere:
+        nod = Nod(a, x)
+        nod.desenare(g)
+    for x in a.adiacenta.keys():
+        for k in a.adiacenta[x].keys():
+            if (a.adiacenta[x][k] != []):
+                if ((x, k) in a.parcurse):
+                    for p in a.adiacenta[x][k]:
+                        if (a.bun == 1):
+                            g.attr('edge', color='green')
+                            g.edge(x, k, p)
+                        else:
+                            for p in a.adiacenta[x][k]:
+                                g.attr('edge', color="black")
+                                g.edge(x, k, p)
+                else:
+                    for p in a.adiacenta[x][k]:
+                        g.attr('edge', color='black')
+                        g.edge(x, k, p)
 
-#programul
-f=open("date.txt") #fisier de forma: nr noduri/ st_init/ st_finala/ legatura1 / legatura2/...
-a=Automat(f)
-drum=a.check_input()
-if (drum!=0):
-    a.parcurgerea_cuvantului(drum)
-print(a.parcurse)
+    g.view()
 
-
-#grafica
-g=Digraph(name="Automat",filename="poppdf")
-for x in a.traducere:
-    nod=Nod(a,x)
-    nod.desenare(g)
-for x in a.adiacenta.keys():
-    for k in a.adiacenta[x].keys():
-        if (a.adiacenta[x][k]!=[]):
-            if ((x,k) in a.parcurse):
-                for p in a.adiacenta[x][k]:
-                    if (a.bun==1):
-                        g.attr('edge',color='green')
-                        g.edge(x,k,p)
-                    else:
-                        for p in a.adiacenta[x][k]:
-                            g.attr('edge',color="black")
-                            g.edge(x,k,p)
-            else:
-                for p in a.adiacenta[x][k]:
-                    g.attr('edge',color='black')
-                    g.edge(x,k,p)
-
-g.view()
+if __name__ == "__main__":
+    main()
