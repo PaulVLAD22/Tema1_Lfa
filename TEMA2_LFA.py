@@ -1,5 +1,5 @@
 from graphviz import Digraph
-
+import termcolor
 
 class Automat:
     def __init__(self, f):
@@ -28,9 +28,11 @@ class Automat:
                     adiacenta_adn[(l[0])][(l[2])].append(l[1])
             sir=f.readline()
         print(adiacenta_adn)
+
         for k in adiacenta_adn.keys():
             for val in adiacenta_adn[k].values():
                 val.sort()
+
         # Transformare in ADF
         a_aparut_stare_noua=1
 
@@ -40,12 +42,6 @@ class Automat:
                 for subl in list(adiacenta_adn[k].values()):
                     if (tuple(subl) not in list(adiacenta_adn.keys())):
                         log=0
-                        for verif in list(adiacenta_adn.keys()):
-                            for elem in tuple(subl):
-                                if (elem not in verif):
-                                    break
-                            else:
-                                log=1
                         if (log==0):
                             tuplul=subl[:]
                             tuplul.sort() # ca sa nu faca diferenta intre (3,5,4) si (4,5,3)
@@ -66,52 +62,11 @@ class Automat:
                                             adiacenta_adn[tuple(tuplul)][p].sort()
 
         print(adiacenta_adn) # era diferenta intre (3,5,4) si (4,3,5)
-        """
-        adiac_buna=[]
-        noduri_in_adiac_buna=[]
-        for k in adiacenta_adn.keys():
-            if (k not in noduri_in_adiac_buna):
-                log=1
-                for el in noduri_in_adiac_buna:
-                    if (len(el)==len(k)):
-                        for x in el:
-                            if (x not in k):
-                                log=0
-                                break
-                        else:
-                            cheie=el
-                            adiac_buna[el]={}
-
-
-                if (log==0):
-                    noduri_in_adiac_buna.append(k)
-                    adiac_buna[k]={}
-                    cheie=k
-
-                for vec in adiacenta_adn[k].keys():
-                    if (vec not in noduri_in_adiac_buna):
-                        log = 1
-                        for elem in noduri_in_adiac_buna:
-                            if (len(elem) == len(k)):
-                                for x in elem:
-                                    if (x not in vec):
-                                        log = 0
-                                        break
-                                else:
-                                    boom=adiacenta_adn[k][vec][:]
-                                    adiac_buna[cheie][elem]=boom
-
-                        if (log == 0):
-                            noduri_in_adiac_buna.append(adiacenta_adn[k][vec])
-                            boom=adiacenta_adn[k][vec]
-                            adiac_buna[cheie][vec]=boom
-
-        print(adiac_buna,"AICICIICICI")
-        """
 
         self.adiacenta= adiacenta_adn
         self.traducere=traducere
         print(self.adiacenta)
+
     def check_input(self):
         cuvant=input("Introduceti cuvantul in automat")
         if (cuvant==""):
@@ -133,16 +88,19 @@ class Automat:
                     ex_litere=1
                 else:
                     ex_cifre=2 #date gresite, exista altceava in afara de cifre si litere
+
             if (ex_litere+ex_cifre==1):
                 return drum
             else:
                 self.bun=0
-                print("Limbajul de intrare este gresit")
+                print(termcolor.colored("Limbajul de Intrare este gresit",color="red"))
         return 0
+
     def parcurgerea_cuvantului(self,drum):
         poz=self.st_initial
         log=0
         print(poz)
+
         for x in drum:
             if (self.adiacenta.get(poz)!=None):
                 if (self.adiacenta[poz].get(x)!=None):
@@ -161,7 +119,7 @@ class Automat:
         if (log==1):
             self.bun=0
             try:
-                print("Nu are unde avansa de pe nodul " + poz)
+                print(termcolor.colored("Nu are unde avansa de pe nodul " + str(poz),color="red"))
             except:
                 sir=str(poz[0])
                 for i in range(1,len(poz)):
@@ -172,11 +130,11 @@ class Automat:
                 if (x in self.st_final):
                     break
             else:
-                print("Nodul in care se termina cuvantul nu este final")
+                print(termcolor.colored("Nodul in care se termina cuvantul nu este final",color="red"))
                 return 0 # ca sa se opreasca
 
         if (log==0):
-            print("Da,a ajuns pe stare finala")
+            print(termcolor.colored("Da,a ajuns pe stare finala",color="blue"))
 
 
 def desen(poz,a):
@@ -188,11 +146,11 @@ def desen(poz,a):
                 if (len(k)==1):
                     if (k[0] not in Noduri_desen):
                         toate_au_fost_parcurse=0
-                        Noduri_desen.append(k[0])
+                        Noduri_desen.append(k[0]) #adaug nodurile prin care s a trecut
                 else:
                     if(tuple(k) not in Noduri_desen):
                         toate_au_fost_parcurse=0
-                        Noduri_desen.append(tuple(k))
+                        Noduri_desen.append(tuple(k)) # adaug nodurile prin care s a trecut
         if (toate_au_fost_parcurse==0):
             print(Noduri_desen)
             for k in a.adiacenta[poz].values():
@@ -257,7 +215,7 @@ def main():
 
     print (Noduri_desen,"AICI E NODURI DESEN")
     #grafica
-    g=Digraph(name="AutomatulFD",filename="AutomatulFD")
+    g=Digraph(name="AutomatulFD",filename="Auto")
     arce=[]
     for k in Noduri_desen:
         nod=Nod(a,k)
