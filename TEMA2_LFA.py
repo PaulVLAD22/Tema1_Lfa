@@ -3,21 +3,20 @@ import termcolor
 
 class Automat:
     def __init__(self, f):
-        self.bun = 1
         self.nr = int(f.readline())
         self.st_initial = f.readline()[0]
         self.st_final = f.readline().split()
         self.parcurse = []
 
-        traducere = []  # nodurile
+        val_arc = []  # nodurile
         adiacenta_adn = {}  # legaturile dintre noduri
         sir = f.readline()
 
         while (sir):
             l=sir.split()
             for i in range(2):
-                if (l[i] not in traducere):
-                    traducere.append(l[i])
+                if (l[2] not in val_arc):
+                    val_arc.append(l[2])
             if (adiacenta_adn.get((l[0]))==None):
                 adiacenta_adn[(l[0])]={}
                 adiacenta_adn[(l[0])][l[2]]=[l[1]] #format [1]: a:[2]
@@ -35,7 +34,6 @@ class Automat:
 
         # Transformare in ADF
         a_aparut_stare_noua=1
-
         while (a_aparut_stare_noua==1):
             a_aparut_stare_noua=0
             for k in list(adiacenta_adn.keys()):
@@ -64,7 +62,9 @@ class Automat:
         print(adiacenta_adn) # era diferenta intre (3,5,4) si (4,3,5)
 
         self.adiacenta= adiacenta_adn
-        self.traducere=traducere
+        self.val_arc=val_arc
+        print(val_arc)
+        print("DEASUPRA MEA")
         print(self.adiacenta)
 
     def check_input(self):
@@ -90,10 +90,17 @@ class Automat:
                     ex_cifre=2 #date gresite, exista altceava in afara de cifre si litere
 
             if (ex_litere+ex_cifre==1):
-                return drum
+                elementele_sunt_in_alfabet=1
+                for x in cuvant:
+                    if (x not in self.val_arc):
+                        elementele_sunt_in_alfabet=0
+                if (elementele_sunt_in_alfabet==1):
+                    return drum
+                else:
+                    print(termcolor.colored("Cuvantul de intrare contine elemente ce nu se afla in alfabet",color="red"))
             else:
                 self.bun=0
-                print(termcolor.colored("Limbajul de Intrare este gresit",color="red"))
+                print(termcolor.colored("Cuvantul de Intrare este gresit",color="red"))
         return 0
 
     def parcurgerea_cuvantului(self,drum):
@@ -117,14 +124,14 @@ class Automat:
                 break
 
         if (log==1):
-            self.bun=0
+
             try:
                 print(termcolor.colored("Nu are unde avansa de pe nodul " + str(poz),color="red"))
             except:
                 sir=str(poz[0])
                 for i in range(1,len(poz)):
                     sir+=','+poz[i]
-                print("Nu are unde avansa de pe nodul "+sir)
+                print(termcolor.colored("Nu are unde avansa de pe nodul "+sir,color="red"))
         else:
             for x in poz:
                 if (x in self.st_final):
@@ -158,6 +165,7 @@ def desen(poz,a):
                         desen(k[0],a)
                     else:
                         desen(tuple(k),a)
+
 class Nod:
     def __init__(self,automat,val):
         self.val=val
@@ -169,6 +177,7 @@ class Nod:
             self.initial=1
         else:
             self.initial=0
+
     def desenare(self,g):
         self.val=tuple(self.val)
         if (self.final==1):
@@ -215,7 +224,7 @@ def main():
 
     print (Noduri_desen,"AICI E NODURI DESEN")
     #grafica
-    g=Digraph(name="AutomatulFD",filename="Auto")
+    g=Digraph(name="AutomatulFD",filename="Au")
     arce=[]
     for k in Noduri_desen:
         nod=Nod(a,k)
