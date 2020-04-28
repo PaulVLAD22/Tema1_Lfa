@@ -153,6 +153,8 @@ def main():
     for x in a.stari:
         nod = Nod(a,x)
         nod.desenare(g)
+        
+    # metoda clasica de reprezentare
     """
     for nod1 in a.adiacenta.keys():
         for nod2 in a.adiacenta[nod1]:
