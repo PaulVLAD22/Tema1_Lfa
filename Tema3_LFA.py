@@ -47,7 +47,10 @@ class PDA:
         if (len(cuvant)==0):
             if (len(stack)==0):
                 self.acceptat=True
-                self.explicatii="Stiva goala"
+                if (st_actuala in self.finale):
+                    self.explicatii="Stiva goala si Stare finala"
+                else:
+                    self.explicatii="Stiva goala"
             else:
                 if (st_actuala in self.finale):
                     self.acceptat=True
@@ -153,7 +156,7 @@ def main():
     for x in a.stari:
         nod = Nod(a,x)
         nod.desenare(g)
-        
+
     # metoda clasica de reprezentare
     """
     for nod1 in a.adiacenta.keys():
